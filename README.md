@@ -1,1 +1,1 @@
-# item-enchanting-class
+# Item Enchanting Class

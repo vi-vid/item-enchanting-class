@@ -1,2 +1,11 @@
-<p>dashboard-screen works!</p>
-{{ isLoading() }}
+<h2 class="text-2xl font-bold leading-7 my-8">My enchanted items @if (selectedItemId(); as selectedItemId) {/ {{ selectedItemId }}}</h2>
+
+@if (!isLoading()) {
+  <div class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-10 gap-4 my-4">
+    @for (item of items(); track $index) {
+      <app-enchanted-item [selected]="selectedIndex() === $index" (selectedChange)="selectItem($index)" [item]="item"></app-enchanted-item>
+    }
+  </div>
+} @else {
+  loading
+}

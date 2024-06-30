@@ -10,35 +10,38 @@ export interface AppState {
 
 export interface FeatureState {
   isLoading: boolean;
+  error?: string;
   items: DashboardItem[];
 }
 
 const initialState: FeatureState = {
   isLoading: false,
-  items: []
+  items: [],
 };
 
 export const dashboardReducer = createReducer(
   initialState,
   on(
-    DashboardActions.getEnchantedItems,
+    DashboardActions.loadEnchantedItems,
     (state): FeatureState => ({
       ...state,
       isLoading: true,
     })
   ),
   on(
-    DashboardActions.getEnchantedItemsSuccess,
+    DashboardActions.loadEnchantedItemsSuccess,
     (state, { items }): FeatureState => ({
       ...state,
       items,
+      error: undefined,
       isLoading: false,
     })
   ),
   on(
-    DashboardActions.getEnchantedItemsError,
-    (state): FeatureState => ({
+    DashboardActions.loadEnchantedItemsError,
+    (state, { error }): FeatureState => ({
       ...state,
+      error,
       isLoading: false,
     })
   )

@@ -9,14 +9,14 @@ import { DashboardItem } from "../../domain/dashboard/dashboard.models";
 export class DashboardEffects {
     public fetchDashboardItems$ = createEffect(() => {
         return this.actions$.pipe(
-            ofType(DashboardActions.getEnchantedItems), 
+            ofType(DashboardActions.loadEnchantedItems), 
             concatMap(() => {
                 return this.http.get('https://jsonplaceholder.typicode.com/posts').pipe(
                     map(data => {
-                        return DashboardActions.getEnchantedItemsSuccess({ items: data as DashboardItem[] });
+                        return DashboardActions.loadEnchantedItemsSuccess({ items: data as DashboardItem[] });
                     }),
-                    catchError((error) => of(DashboardActions.getEnchantedItemsError({
-                        error
+                    catchError(() => of(DashboardActions.loadEnchantedItemsError({
+                        error: 'something went wrong during the request, try to fetch your enchanted items a bit later'
                     })))
                   )
             })

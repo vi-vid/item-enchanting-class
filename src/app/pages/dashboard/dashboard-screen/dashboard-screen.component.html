@@ -1,11 +1,30 @@
-<h2 class="text-2xl font-bold leading-7 my-8">My enchanted items @if (selectedItemId(); as selectedItemId) {/ {{ selectedItemId }}}</h2>
+<h2 class="text-2xl font-bold leading-7 my-8 p-2 sticky top-2 z-10 bg-cyan-950 text-white rounded-md">
+  my enchanted items
+  @if (selectedItemId(); as selectedItemId) {
+    🔮 {{ selectedItemId }}
+  }
+</h2>
 
-@if (!isLoading()) {
+@if (vm().error; as error) {
+  <div class="text-center">
+    <div class="text-red-600">{{ error }}</div>
+    <button class="rounded-full bg-cyan-950 hover:bg-cyan-900 active:bg-cyan-800 text-white px-4 py-1 my-2" (click)="onClickRetry()">
+      retry
+    </button>
+  </div>
+}
+
+@if (!vm().isLoading) {
   <div class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-10 gap-4 my-4">
-    @for (item of items(); track $index) {
-      <app-enchanted-item [selected]="selectedIndex() === $index" (selectedChange)="selectItem($index)" [item]="item"></app-enchanted-item>
+    @for (item of vm().items; track $index) {
+      <app-enchanted-item
+        class="enchanted-item"
+        [selected]="selectedIndex() === $index"
+        (selectedChange)="selectItem($index, $event)"
+        [item]="item"
+      ></app-enchanted-item>
     }
   </div>
 } @else {
-  loading
+  <div class="text-center p-10 text-neutral-500">loading...</div>
 }

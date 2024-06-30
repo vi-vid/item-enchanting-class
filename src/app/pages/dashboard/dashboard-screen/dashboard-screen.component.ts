@@ -1,30 +1,24 @@
-import { Component, HostListener, computed, effect, inject, signal } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { DashboardActions, fromDashboard } from '../../../stores/dashboard';
+import { Component, computed, inject, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { EnchantedItemComponent } from './components/enchanted-item/enchanted-item.component';
+import { DashboardScreenService } from './dashboard-screen.service';
 
 @Component({
   selector: 'app-dashboard-screen',
   standalone: true,
   imports: [JsonPipe, EnchantedItemComponent],
   templateUrl: './dashboard-screen.component.html',
-  styleUrl: './dashboard-screen.component.scss'
+  styleUrl: './dashboard-screen.component.scss',
+  providers: [DashboardScreenService]
 })
 export class DashboardScreenComponent {
-  readonly #store = inject(Store);
+  readonly #dashboardScreenService = inject(DashboardScreenService);
 
-  @HostListener('document:keydown.escape')
-  public onClick() {
-    this.selectedIndex.set(undefined);
-  }
-
-  public isLoading = this.#store.selectSignal(fromDashboard.selectIsLoading$);
-  public items = this.#store.selectSignal(fromDashboard.selectItems$);
+  public vm = this.#dashboardScreenService.vm;
   public selectedIndex = signal<number | undefined>(undefined);
 
   public selectedItemId = computed(() => {
-    const items = this.items();
+    const items = this.vm().items;
     const selectedIndex = this.selectedIndex();
     if (items && selectedIndex !== undefined) {
       return items[selectedIndex].id;
@@ -33,10 +27,14 @@ export class DashboardScreenComponent {
   });
 
   constructor() {
-    this.#store.dispatch(DashboardActions.getEnchantedItems());
+    this.#dashboardScreenService.loadEnchantedItems();
   }
 
-  public selectItem(index: number) {
-    this.selectedIndex.set(index);
+  public selectItem(index: number, selected: boolean) {
+    this.selectedIndex.set(selected ? index : undefined);
+  }
+
+  public onClickRetry() {
+    this.#dashboardScreenService.loadEnchantedItems();
   }
 }

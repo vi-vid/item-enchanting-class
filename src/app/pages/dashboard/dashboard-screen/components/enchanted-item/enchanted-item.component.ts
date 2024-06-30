@@ -13,6 +13,20 @@ const SortedPropertyKeys: PropertyKeys[]  = ['title', 'userId', 'id', 'body'];
   styleUrl: './enchanted-item.component.scss'
 })
 export class EnchantedItemComponent {
+  @HostBinding('class')
+  get backgroundClass() { return this.selected() ? 'bg-white' : 'bg-slate-300' }
+
+  @HostListener('click')
+  public onClick() {
+    this.selectedChange.emit(true);
+    this.currentPropertyIndex.set((this.currentPropertyIndex() + 1) % SortedPropertyKeys.length);
+  }
+
+  @HostListener('document:keydown.escape')
+  public onEscape() {
+    this.selectedChange.emit(false);
+  }
+
   public item = input.required<DashboardItem>();
   public selected = input<boolean>(false);
   public selectedChange = output<boolean>();
@@ -26,15 +40,6 @@ export class EnchantedItemComponent {
   });
 
   public currentPropertyIndex = signal<number>(0);
-
-  @HostBinding('class')
-  get backgroundClass() { return this.selected() ? 'bg-amber-200' : 'bg-white' }
-
-  @HostListener('click')
-  public onClick() {
-    this.selectedChange.emit(true);
-    this.currentPropertyIndex.set((this.currentPropertyIndex() + 1) % SortedPropertyKeys.length);
-  }
 
   constructor() {
     effect(() => {

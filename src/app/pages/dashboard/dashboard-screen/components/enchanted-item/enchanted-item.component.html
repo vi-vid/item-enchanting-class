@@ -1,2 +1,5 @@
-<h3>{{ currentPropertyToken() }}</h3>
+<h3 class="absolute top-0 left-0 right-0 px-2 py-1 text-white" [class.bg-slate-400]="!selected()" [class.bg-cyan-950]="selected()">
+  {{ currentPropertyToken() }}
+</h3>
+
 <article>{{ currentPropertyValue() }}</article>

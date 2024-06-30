@@ -1,3 +1,32 @@
+@keyframes disappear {
+  0% {
+    @apply opacity-100;
+    scale: 1;
+  }
+
+  100% {
+    @apply opacity-0;
+    scale: 0.75;
+  }
+}
+
+@keyframes appear {
+  0% {
+    @apply opacity-0;
+    scale: 0.75;
+  }
+
+  100% {
+    @apply opacity-100;
+    scale: 1;
+  }
+}
+
 :host {
-    @apply aspect-square shadow-md rounded-md overflow-hidden text-xs p-2 cursor-pointer select-none;
+  @apply aspect-square shadow-md rounded-md overflow-hidden text-xs px-2 pt-7 pb-1 cursor-pointer select-none relative;
+
+  animation-name: disappear;
+  animation-timing-function: linear;
+  animation-timeline: view();
+  animation-range: contain 100% exit;
 }

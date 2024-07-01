@@ -16,6 +16,9 @@ export class EnchantedItemComponent {
   @HostBinding('class')
   get backgroundClass() { return this.selected() ? 'bg-white' : 'bg-slate-300' }
 
+  @HostBinding('title')
+  get titleAttribute() { return this.currentPropertyValue(); }
+
   @HostListener('click')
   public onClick() {
     this.selectedChange.emit(true);
